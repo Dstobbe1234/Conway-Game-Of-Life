@@ -32,20 +32,23 @@ class cell {
 
     } 
     lifeDeath() {
-        if(this.live && this.liveNeighbours === 1 || this.liveNeighbours === 0) {
+        if(this.live && this.liveNeighbours < 2) {
             this.live = false
         } else if(this.live && this.liveNeighbours === 4) {
             this.live = false;
         } else if (!this.live && this.liveNeighbours === 3) {
             this.live = true;
         }
-        // if (this.x === 200 && this.y === 200) {
-        //     for(let i = 0; i < this.neighbours.length; i++) {
-        //         this.neighbours[i].live = true
-        //     }
-        // }
+
     }
     display() {
+
+        // if(this.x === cnv.width - 20 && this.y === 100) {
+        //     for(let i = 0; i < this.neighbours.length; i++) {
+        //         this.neighbours[i].live = true;
+        //     }
+        // }
+
         if (this.live) {
             ctx.fillStyle = "yellow";
         } else {
@@ -71,20 +74,21 @@ function createCells() {
     let x = 0;
     let y = 0;
     for(y; y < cnv.height; y+=20) {
-        x = 0
+        x = 0;
         for(x; x < cnv.width; x+=20) {
             cells.push(new cell(x, y, 20, 20));
         }
     }
-    getNeighbours([-1, 1, -36, -35, -34, 34, 35, 36])
-}
-
-function getNeighbours(num) {
-    
     for(let i = 0; i < cells.length; i++) {
-        for(let numIndex = 0; numIndex < num.length; numIndex++) {
-            if (cells[i + num[numIndex]] !== undefined) {
-                cells[i].neighbours.push(cells[i + num[numIndex]])
+        let neighbourArgument = [-1, 1, -36, -35, -34, 34, 35, 36];
+        if(i > 1014) {
+            neighbourArgument.push(-1014, -1015, -1016)
+        } else if(i < 35) {
+            neighbourArgument.push(1014, 1015, 1016)
+        }
+        for(let neighbourIndex = 0; neighbourIndex < neighbourArgument.length; neighbourIndex++) {
+            if (cells[i + neighbourArgument[neighbourIndex]] !== undefined) {
+                cells[i].neighbours.push(cells[i + neighbourArgument[neighbourIndex]])
             }
         }
     }
